@@ -12,20 +12,14 @@ import javax.swing.*;
 public class HandleScreen extends JFrame{
 	//File to storage the cords
 	File file = new File("save/mycords.csv");
-	
+
 	//Frame
 	private JFrame menu = new JFrame();
 	
 	//Panels
 	private JPanel bg = new JPanel();
-	private JPanel inputCord = new JPanel();
-	private JPanel text = new JPanel();
 	private JPanel myCords = new JPanel();
-	private JPanel table = new JPanel();
 	private JPanel addCords = new JPanel();
-	
-	//toolBox store the maths and operations funcs for the code
-	private toolBox func = new toolBox();
 	
 	//Color
 	private Color creme = new Color(242, 239, 230);
@@ -68,27 +62,18 @@ public class HandleScreen extends JFrame{
 		menu.setLayout(null);
 		menu.setVisible(true);
 	}
+
+	//Stop aplication whem close
+	protected void processWindowEvent(WindowEvent e) {
+		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+		   System.exit(0);
+		}
+	}
 	
 	//Call the screens
 	private void listCordScreen() {
 		listMyCords();
 		editCords();
-	}
-	
-	//Func to call the operation in the toolBox when the convert button is used
-	private void calcAction(JTextField cordX, JTextField cordY, JTextField displayX, JTextField displayY) {
-		int X = Integer.parseInt(cordX.getText());
-		int Z = Integer.parseInt(cordY.getText());
-		
-		int[] cordNether;
-		cordNether = func.findCordsNether(X, Z);
-		
-		System.out.println(cordNether[0]+", "+cordNether[1]);
-		
-		String x = String.valueOf(cordNether[0]);
-		String y = String.valueOf(cordNether[1]);
-		displayX.setText(x);
-		displayY.setText(y);
 	}
 
 	private void listMyCords() {
@@ -145,6 +130,7 @@ public class HandleScreen extends JFrame{
 				if(isNumber(tfCordX.getText()) && isNumber(tfCordZ.getText())) {
 					addNewCord(tfCordX.getText(), tfCordZ.getText(), tfCordName.getText());
 				}
+
 				//reset the text field
 				tfCordX.setText(" ");
 				tfCordZ.setText(" ");
@@ -152,23 +138,18 @@ public class HandleScreen extends JFrame{
 			}
 		});
 		addCords.add(add);
-		
-		//Config the remove button
-		/*
-		JButton remove = new JButton("REMOVE");
-		remove.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
-				// check for selected row first
-	            if(tableCords.getSelectedRow() != -1) {
-	               // remove selected row from the model
-	               tableMode.removeRow(tableCords.getSelectedRow());
-	            }
 
+		//Config the remove button
+		JButton remove = new JButton("REMOVE");
+		remove.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int row = tableCords.getSelectedRow();
+				if(row > -1) removeSelectedCord(row);
 			}
 		});
 		addCords.add(remove);
-		*/
+
 		//put the panel in the frame
 		menu.add(addCords);
 	}
@@ -187,9 +168,19 @@ public class HandleScreen extends JFrame{
 				
 	}
 	
+	//Function  to add a new cord to the table
 	public void addNewCord(String cordX, String cordZ, String name) {
 		toolBox tool = new toolBox();
 		tool.addNewCord2CSV(this.file, cordX, cordZ, name);
+		tableMode.clear();
+		cordsList.readFromCSV(file);
+		tableMode.fireTableDataChanged();
+	}
+
+	//Function to remove a cord of the function
+	public void removeSelectedCord(int row){
+		toolBox tool = new toolBox();
+		tool.removeCordFromCSV(this.file, row);
 		tableMode.clear();
 		cordsList.readFromCSV(file);
 		tableMode.fireTableDataChanged();

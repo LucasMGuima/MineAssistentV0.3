@@ -1,6 +1,6 @@
 /*
- * @author Lucas da Mata Guimar„es
- * @version 0.1
+ * @author Lucas da Mata Guimar√£es
+ * @version 0.4
  * 
  * Creat in: 05/10/2020
  */
@@ -12,7 +12,7 @@ public class MineAssistent {
 	}
 	
 	public static void setUp() {
-		HandleScreen screen = new HandleScreen("MineAssistent V0.3");
+		HandleScreen screen = new HandleScreen("MineAssistent V0.4");
 		screen.run();
 	}
 	
