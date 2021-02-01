@@ -1,6 +1,6 @@
 /*
  * @author Lucas da Mata Guimarães
- * @version 0.4
+ * @version 0.3
  * 
  * Creat in: 05/10/2020
  */
